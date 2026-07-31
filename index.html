@@ -499,6 +499,14 @@
   document.getElementById('loginPass').addEventListener('keydown', function(e){ if(e.key==='Enter') tryLogin(); });
   document.getElementById('loginId').addEventListener('keydown', function(e){ if(e.key==='Enter') tryLogin(); });
   document.getElementById('loginId').focus();
+  window.__oddLogout = function(){
+    sessionStorage.removeItem('odd_auth');
+    document.getElementById('loginId').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginErr').classList.remove('show');
+    gate.classList.remove('hidden');
+    document.getElementById('loginId').focus();
+  };
 })();
 </script>
 <div class="app">
@@ -533,6 +541,7 @@
       </div>
       <button class="icon-btn" id="refreshBtn" title="Force resync now">⟳</button>
       <button class="icon-btn" id="pauseBtn" title="Pause live feed">⏸</button>
+      <button class="icon-btn" id="logoutBtn" title="Logout">⏻</button>
     </div>
   </div>
 
@@ -1282,6 +1291,9 @@ document.getElementById('spotLabel').textContent = state.underlying + ' Future';
 BUILDER_IDS.forEach(n=> document.getElementById(`spreadSpotLabel${n}`).textContent = state.underlying + ' Future');
 
 document.getElementById('refreshBtn').addEventListener('click', fetchSnapshot);
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  if(confirm('Logout ho jaayein?')) window.__oddLogout();
+});
 document.getElementById('pauseBtn').addEventListener('click', (e)=>{
   state.paused = !state.paused;
   e.target.textContent = state.paused ? '▶' : '⏸';
